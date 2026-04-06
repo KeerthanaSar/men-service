@@ -18,5 +18,35 @@ public class ProductRequestDTO {
     @PositiveOrZero(message = "Quantity cannot be negative")
     private int quantity;
 
-    // getters and setters
+    public String getProductType() {
+        return productType;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

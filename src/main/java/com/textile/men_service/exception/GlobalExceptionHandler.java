@@ -18,26 +18,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex) {
 
-        Map<String, String> fieldErrors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors()
-                .forEach(error ->
-                        fieldErrors.put(error.getField(), error.getDefaultMessage())
-                );
+                .forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
 
         ErrorResponse response = new ErrorResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setError("Validation Failed");
-        response.setMessage("Invalid request data");
-        response.setValidationErrors(fieldErrors);
+        response.setMessage("Invalid input data");
+        response.setValidationErrors(errors);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(
-            ResourceNotFoundException ex) {
-
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
         ErrorResponse response = new ErrorResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -48,13 +44,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-
+    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
         ErrorResponse response = new ErrorResponse();
         response.setTimestamp(LocalDateTime.now());
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setError("Internal Server Error");
-        response.setMessage("Something went wrong. Please try again later.");
+        response.setMessage("Please contact support");
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }

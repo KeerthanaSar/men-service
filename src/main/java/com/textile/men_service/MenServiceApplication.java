@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MenServiceApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(MenServiceApplication.class, args);
 	}
-
 }

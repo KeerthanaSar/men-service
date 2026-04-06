@@ -22,61 +22,50 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO addProduct(ProductRequestDTO requestDTO) {
         Product product = mapToEntity(requestDTO);
-        Product savedProduct = productRepository.save(product);
-        return mapToResponseDTO(savedProduct);
+        return mapToResponse(productRepository.save(product));
     }
 
     @Override
     public List<ProductResponseDTO> getAllProducts() {
         return productRepository.findAll()
                 .stream()
-                .map(this::mapToResponseDTO)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public ProductResponseDTO getProductById(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Product not found with id: " + id)
-                );
-        return mapToResponseDTO(product);
+        return mapToResponse(getEntity(id));
     }
 
     @Override
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO requestDTO) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Product not found with id: " + id)
-                );
-
+        Product product = getEntity(id);
         product.setProductType(requestDTO.getProductType());
         product.setCategory(requestDTO.getCategory());
         product.setPrice(requestDTO.getPrice());
         product.setQuantity(requestDTO.getQuantity());
-
-        Product updatedProduct = productRepository.save(product);
-        return mapToResponseDTO(updatedProduct);
+        return mapToResponse(productRepository.save(product));
     }
 
     @Override
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Product not found with id: " + id)
-                );
-        productRepository.delete(product);
+        productRepository.delete(getEntity(id));
     }
 
     @Override
     public List<ProductResponseDTO> getProductsByCategory(String category) {
         return productRepository.findByCategory(category)
                 .stream()
-                .map(this::mapToResponseDTO)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
-    // ===== Mapping Methods =====
+    private Product getEntity(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product not found with id: " + id));
+    }
 
     private Product mapToEntity(ProductRequestDTO dto) {
         Product product = new Product();
@@ -87,13 +76,13 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-    private ProductResponseDTO mapToResponseDTO(Product product) {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setId(product.getId());
-        responseDTO.setProductType(product.getProductType());
-        responseDTO.setCategory(product.getCategory());
-        responseDTO.setPrice(product.getPrice());
-        responseDTO.setQuantity(product.getQuantity());
-        return responseDTO;
+    private ProductResponseDTO mapToResponse(Product product) {
+        ProductResponseDTO dto = new ProductResponseDTO();
+        dto.setId(product.getId());
+        dto.setProductType(product.getProductType());
+        dto.setCategory(product.getCategory());
+        dto.setPrice(product.getPrice());
+        dto.setQuantity(product.getQuantity());
+        return dto;
     }
 }

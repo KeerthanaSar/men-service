@@ -1,8 +1,8 @@
 package com.textile.men_service.controller;
 
-import com.textile.men_service.entity.Product;
+import com.textile.men_service.dto.ProductRequestDTO;
+import com.textile.men_service.dto.ProductResponseDTO;
 import com.textile.men_service.service.ProductService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,30 +19,32 @@ public class ProductController {
         this.productService = productService;
     }
 
-
     @PostMapping
-    public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
-        Product savedProduct = productService.addProduct(product);
-        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+    public ResponseEntity<ProductResponseDTO> addProduct(
+            @RequestBody ProductRequestDTO requestDTO) {
+
+        return new ResponseEntity<>(
+                productService.addProduct(requestDTO),
+                HttpStatus.CREATED
+        );
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(
+    public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable Long id,
-            @Valid @RequestBody Product product) {
+            @RequestBody ProductRequestDTO requestDTO) {
 
-        Product updatedProduct = productService.updateProduct(id, product);
-        return ResponseEntity.ok(updatedProduct);
+        return ResponseEntity.ok(productService.updateProduct(id, requestDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -52,7 +54,9 @@ public class ProductController {
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category) {
+    public ResponseEntity<List<ProductResponseDTO>> getProductsByCategory(
+            @PathVariable String category) {
+
         return ResponseEntity.ok(productService.getProductsByCategory(category));
     }
 }

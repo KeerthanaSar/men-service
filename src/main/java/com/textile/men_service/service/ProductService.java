@@ -1,20 +1,21 @@
 package com.textile.men_service.service;
 
-import com.textile.men_service.entity.Product;
+import com.textile.men_service.dto.ProductRequestDTO;
+import com.textile.men_service.dto.ProductResponseDTO;
 
 import java.util.List;
 
 public interface ProductService {
 
-    Product addProduct(Product product);
+    ProductResponseDTO addProduct(ProductRequestDTO requestDTO);
 
-    List<Product> getAllProducts();
+    List<ProductResponseDTO> getAllProducts();
 
-    Product getProductById(Long id);
+    ProductResponseDTO getProductById(Long id);
 
-    Product updateProduct(Long id, Product product);
+    ProductResponseDTO updateProduct(Long id, ProductRequestDTO requestDTO);
 
     void deleteProduct(Long id);
 
-    List<Product> getProductsByCategory(String category);
+    List<ProductResponseDTO> getProductsByCategory(String category);
 }

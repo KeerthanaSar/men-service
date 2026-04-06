@@ -3,6 +3,7 @@ package com.textile.men_service.controller;
 import com.textile.men_service.dto.ProductRequestDTO;
 import com.textile.men_service.dto.ProductResponseDTO;
 import com.textile.men_service.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponseDTO> addProduct(
-            @RequestBody ProductRequestDTO requestDTO) {
+            @Valid @RequestBody ProductRequestDTO requestDTO) {
 
         return new ResponseEntity<>(
                 productService.addProduct(requestDTO),
@@ -42,7 +43,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductRequestDTO requestDTO) {
+            @Valid @RequestBody ProductRequestDTO requestDTO) {
 
         return ResponseEntity.ok(productService.updateProduct(id, requestDTO));
     }
